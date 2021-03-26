@@ -3,15 +3,20 @@ import jieba
 import jieba.posseg as pseg
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
-import re, json
+import re, json, os
+
+this_file = os.path.abspath(__file__)
+this_dir = os.path.dirname(this_file)
 
 def tokenize_zh(text):
   words = jieba.lcut(text)
   return words
 
 def get_chinese_stop_words():
+  global this_dir
   chinese_stop_words = []
-  with open('./data/stop_words.json', 'r') as fp:
+  dataPath = os.path.join(this_dir, 'data/stop_words.json')
+  with open(dataPath, 'r') as fp:
     chinese_stop_words = json.load(fp)
 
   return chinese_stop_words
@@ -34,13 +39,15 @@ def is_eng_review(body):
   return score < 10
 
 def tokenize_body(body):
-  jieba.load_userdict('./data/wordlist.txt')
+  global this_dir
+  dataPath = os.path.join(this_dir, './data/wordlist.txt')
+  jieba.load_userdict(dataPath)
 
   no_emote = re.sub(r"(:[a-zA-Z]+:|\\n|\\r|\n|\r|:D|:P|\[\/?[a-zA-Z]+\]|\[IMG:[0-9]+\])", "", body)
   no_emote = emoji_stem(no_emote)
   porter = PorterStemmer()
 
-  if len(no_emote) is 0:
+  if len(no_emote) == 0:
     return []
 
   token_count = token_count + 1
