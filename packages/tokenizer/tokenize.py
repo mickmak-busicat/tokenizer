@@ -50,8 +50,6 @@ def tokenize_body(body):
   if len(no_emote) == 0:
     return []
 
-  token_count = token_count + 1
-
   if is_eng_review(no_emote):
     text = re.sub('<[^>]*>', '', no_emote)
     emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(|D|P)', text)
