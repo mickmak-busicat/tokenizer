@@ -3,11 +3,18 @@ import jieba
 import jieba.posseg as pseg
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
-import re
+import re, json
 
 def tokenize_zh(text):
   words = jieba.lcut(text)
   return words
+
+def get_chinese_stop_words():
+  chinese_stop_words = []
+  with open('./data/stop_words.json', 'r') as fp:
+    chinese_stop_words = json.load(fp)
+
+  return chinese_stop_words
 
 def emoji_stem(text):
   very_positive = ['😍', '😂', '🤣', '🥰', '😆', '🤩', '🤪', '💕', '🤤', '🥳', '💯']
@@ -27,7 +34,7 @@ def is_eng_review(body):
   return score < 10
 
 def tokenize_body(body):
-  jieba.load_userdict('./wordlist.txt')
+  jieba.load_userdict('./data/wordlist.txt')
 
   no_emote = re.sub(r"(:[a-zA-Z]+:|\\n|\\r|\n|\r|:D|:P|\[\/?[a-zA-Z]+\]|\[IMG:[0-9]+\])", "", body)
   no_emote = emoji_stem(no_emote)
