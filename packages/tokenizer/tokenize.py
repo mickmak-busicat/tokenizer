@@ -7,6 +7,8 @@ import re, json, os
 
 this_file = os.path.abspath(__file__)
 this_dir = os.path.dirname(this_file)
+dataPath = os.path.join(this_dir, './data/wordlist.txt')
+jieba.load_userdict(dataPath)
 
 def tokenize_zh(text):
   words = jieba.lcut(text)
@@ -39,10 +41,6 @@ def is_eng_review(body):
   return score < 10
 
 def tokenize_body(body):
-  global this_dir
-  dataPath = os.path.join(this_dir, './data/wordlist.txt')
-  jieba.load_userdict(dataPath)
-
   no_emote = re.sub(r"(:[a-zA-Z]+:|\\n|\\r|\n|\r|:D|:P|\[\/?[a-zA-Z]+\]|\[IMG:[0-9]+\])", "", body)
   no_emote = emoji_stem(no_emote)
   porter = PorterStemmer()
