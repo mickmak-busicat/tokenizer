@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import jieba
 import jieba.posseg as pseg
+import nltk
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 import re, json, os
+
+nltk.download('stopwords')
 
 this_file = os.path.abspath(__file__)
 this_dir = os.path.dirname(this_file)
